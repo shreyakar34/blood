@@ -1,0 +1,181 @@
+<html>
+<?php $title="Blood Compatibility Checker"; ?>
+<?php require 'head.php'; ?>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+  background-image: url('Add a heading.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+    }
+
+    h1 {
+      text-align: center;
+	  padding-top: 180px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+	  padding-top: 10px;
+
+    }
+
+    .form {
+      width: 600px;
+      border: 1px solid #ccc;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: bold;
+    }
+
+    .form-select {
+      display: block;
+      width: 100%;
+      height: 40px;
+      border: 1px solid #ccc;
+      padding: 5px;
+    }
+
+    .form-button {
+      display: block;
+      width: 100%;
+      height: 40px;
+      border: none;
+      background-color: #0078d4;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+      color: green;
+	  
+    }
+
+    .error {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+      color: red;
+    }
+
+  </style>
+</head>
+<body background="/image/Add a heading.jpg">
+  <h1>Blood Donation Compatibility Finder</h1>
+  <div class="container">
+    <form class="form" id="form">
+      <div class="form-group">
+        <label class="form-label" for="blood">Your blood group</label>
+        <select class="form-select" id="blood" name="blood" required>
+          <option value="">Select your blood group</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+      </div>
+      <button class="form-button" id="submit" type="submit">Find compatibility</button>
+    </form>
+  </div>
+  <div class="result" id="result"></div>
+  <div class="error" id="error"></div>
+  <script>
+    // Get the form element
+    var form = document.getElementById("form");
+
+    // Get the result and error elements
+    var result = document.getElementById("result");
+    var error = document.getElementById("error");
+
+    // Define a function to check the blood donation compatibility
+    function checkCompatibility(blood) {
+      // Define an object to store the compatible blood groups for each blood group
+      var compatible = {
+        "A+": {
+          "donate": "A+, AB+",
+          "receive": "A+, A-, O+, O-"
+        },
+        "A-": {
+          "donate": "A+, A-, AB+, AB-",
+          "receive": "A-, O-"
+        },
+        "B+": {
+          "donate": "B+, AB+",
+          "receive": "B+, B-, O+, O-"
+        },
+        "B-": {
+          "donate": "B+, B-, AB+, AB-",
+          "receive": "B-, O-"
+        },
+        "AB+": {
+          "donate": "AB+",
+          "receive": "A+, A-, B+, B-, AB+, AB-, O+, O-"
+        },
+        "AB-": {
+          "donate": "AB+, AB-",
+          "receive": "A-, B-, AB-, O-"
+        },
+        "O+": {
+          "donate": "A+, B+, AB+, O+",
+          "receive": "O+, O-"
+        },
+        "O-": {
+          "donate": "A+, A-, B+, B-, AB+, AB-, O+, O-",
+          "receive": "O-"
+        }
+      };
+
+      // Return the compatible blood groups for the given blood group
+      return compatible[blood];
+    }
+
+    // Add an event listener to the form submit event
+    form.addEventListener("submit", function(event) {
+      // Prevent the default form submission behavior
+      event.preventDefault();
+
+      // Get the value of the blood group input
+      var blood = form.blood.value;
+
+      // Check if the input is not empty
+      if (blood) {
+        // Clear the error message
+        error.innerHTML = "";
+
+        // Call the checkCompatibility function and store the result
+        var compatibility = checkCompatibility(blood);
+
+        // Display the result message with the compatibility
+        result.innerHTML = "You can donate blood to " + compatibility.donate + " and receive blood from " + compatibility.receive + ".";
+      } else {
+        // Clear the result message
+        result.innerHTML = "";
+
+        // Display the error message if the input is empty
+        error.innerHTML = "Please select your blood group.";
+      }
+    });
+  </script>
+</body>
+</html>
